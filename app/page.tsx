@@ -17,8 +17,14 @@ export default function Home() {
   const [posts,setPost]=useState<z.infer<typeof PostSchema>[]>([]);
   const router=useRouter();
   useEffect(()=>{
-    axios.get('/api/user/post/feed',{postNo})
-    setPost((post)=>(post.concat(newPost)));
+    axios.get('/api/user/post/feed',{params:{postno:postNo}})
+    .then((data)=>{
+      console.log(data);
+      
+      const newPost=data.data.data;      
+      setPost((post)=>([...post,...newPost]));
+    })
+    
   },[postNo])
 
   return (
@@ -35,7 +41,12 @@ export default function Home() {
         />
       </div>
       <div className="xl:col-span-8 lg:col-span-6 col-span-10">
-          <PostCard title="india" description="india is my country" authorUsername="laks57" authorProfilePhoto="https://avatars.githubusercontent.com/u/11613311?v=4" images={["https://avatars.githubusercontent.com/u/11613311?v=4","https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F085e8ad8-528e-47d7-8922-a23dc4016453%2F8cbbd391-ac04-4427-8a19-1bfc68fba8e8%2FD27qoI0JTz-VN8mh6L8fgw.png?table=block&id=a8af0593-7683-4afc-925d-0d92e052f153&cache=v2"]}/>
+        {posts.map((post,i)=>(
+          <div key={i}>
+          <PostCard title={post.title} description={post.description?post.description:undefined} authorUsername={post.author?.username||""} images={post.images}/>
+          </div>
+        ))}
+          
 
       </div>
       <div>

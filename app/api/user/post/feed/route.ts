@@ -8,14 +8,9 @@ export async function GET(request:NextRequest){
 
     /*ye change karna hai jab middleware banalo */
     try{
+        
         const userId=""
-        const reqBody=GetFeedSchema.safeParse(await request.json());
-
-        if(!reqBody.success){
-            reqBody.error.issues;
-        }
-        else{
-            const {postNo}=reqBody.data;
+        const postno=Number(request.nextUrl.searchParams.get("postno"))||0;
 
         const posts:z.infer<typeof PostSchema>[]=await prisma.post.findMany({
             where:{
@@ -23,22 +18,28 @@ export async function GET(request:NextRequest){
                     not:userId
                 }
             },
+            include:{
+                author:true,
+                likedBY:true
+            },
 
             orderBy:{
                 createdAt:"desc"
             },
-            skip:postNo,
+            skip:postno,
             take:20
         })
-        const response=NextResponse.json({
-            message:"Login successful",
+        
+        return NextResponse.json({
+            message:"post fetched successful",
             success:true,
             data:posts
         })
-        return response;
-    }
+        
+        
+    // }
 
     } catch (error:any) {
-        return NextResponse.json({error:error.message},{status:500})
+        return NextResponse.json({error:error.message})
     }
 }

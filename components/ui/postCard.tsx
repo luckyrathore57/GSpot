@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faArrowRight, faComment, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 interface CardProps {
   title: string;
-  description: string;
+  description?: string;
   authorUsername: string;
-  authorProfilePhoto: string;
   images: string[];
 }
 
@@ -13,7 +12,6 @@ const PostCard: React.FC<CardProps> = ({
   title,
   description,
   authorUsername,
-  authorProfilePhoto,
   images,
 }) => {
 
@@ -25,16 +23,15 @@ const PostCard: React.FC<CardProps> = ({
         }
     },[])
   return (
-    <div className="bg-card text-white rounded-lg overflow-hidden shadow-md w-full">
+    <div className="bg-slate-900 text-white rounded-lg overflow-hidden shadow-md w-full m-2">
       <div className="flex items-center justify-between px-4 py-2 border-b">
         <div className="flex items-center">
-          <img className="w-8 h-8 rounded-full mr-2" src={authorProfilePhoto} alt="Author" />
           <span className="font-semibold text-white">{authorUsername}</span>
         </div>
       </div>
-      <div className="px-4 py-2">
+      <div className="px-4 py-2"> 
         <h2 className="text-lg font-semibold text-white mb-2">{title}</h2>
-        <p className="text-gray-100 mb-4">{description}</p>
+        <p className={`text-gray-100 mb-4 ${description?"":"hidden"}`}>{description}</p>
         <div className='flex items-center'>
             <span className={`${(imageNo==0)?"hidden":""}`} onClick={()=>{
             setCurrentImage(images[imageNo-1]);
@@ -50,8 +47,8 @@ const PostCard: React.FC<CardProps> = ({
       </div>
       <div className="flex justify-between px-4 py-2 border-t">
         <div className="flex">
-          <span className="mr-2 text-white cursor-pointer">Like</span>
-          <span className="text-white cursor-pointer">Comment</span>
+          <span className="mr-2 text-white cursor-pointer"><FontAwesomeIcon icon={faThumbsUp} /></span>
+          <span className="text-white cursor-pointer"><FontAwesomeIcon icon={faComment} /></span>
         </div>
       </div>
     </div>

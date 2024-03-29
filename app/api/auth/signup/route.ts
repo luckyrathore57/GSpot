@@ -1,25 +1,31 @@
 import prisma from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 import bcryptjs from "bcryptjs";
-import { SingupSchema } from "@/zod/schema/authenticationSchema";
+import { SignupSchema } from "@/zod/schema/authenticationSchema";
 
 
 export async function POST(request:NextRequest){
     try {
-        const reqBody=SingupSchema.safeParse(await request.json());
+        const reqBody=SignupSchema.safeParse(await request.json());
         if(!reqBody.success){
             reqBody.error.issues;
         }
         else{
-            const {username,password,email,collegeName}=reqBody.data;
+            let {username,password,email,collegeName}=reqBody.data;
+            username=username.toLowerCase();
+            email=email.toLowerCase();
+
+            
+
+
             const user=await prisma.user.findFirst({
                 where:{
                     username:username,
                 }
             });
             if(user){
-                return NextResponse.json({error:"user already found"},{status:400});
                 console.log("user exist");
+                return NextResponse.json({error:"user already found"},{status:400});
             }
 
             const salt=await bcryptjs.genSalt(10);
@@ -30,6 +36,7 @@ export async function POST(request:NextRequest){
                 }
             });
 
+            
             const newUser=await prisma.user.create({
                 data:{
                     username:username,
@@ -38,7 +45,9 @@ export async function POST(request:NextRequest){
                     collegeId:college!.id
                 }
             });
-
+            
+            
+            
             return NextResponse.json({
                 message:"user created successfully",
                 success:true,
@@ -47,6 +56,8 @@ export async function POST(request:NextRequest){
 
         }
     } catch (error:any) {
+        console.log(error);
+        
         return NextResponse.json({error: error.message}, {status: 500})
 
     }

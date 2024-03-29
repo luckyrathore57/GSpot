@@ -4,6 +4,10 @@ import { SignupCard } from "@/components/auth/SignupCard";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { z } from "zod";
+import {SignupSchema} from "@/zod/schema/authenticationSchema"
+
+
 
 export default function Page(){
 
@@ -11,11 +15,13 @@ export default function Page(){
     const [collegeOption,setCollegeOption]=useState<string[]>([]);
     const router=useRouter();
 
-    const onClickSignup=async (username:string,password:string,email:string,collegeName:string)=>{
+    const onClickSignup=async ({username,password,email,collegeName}:z.infer<typeof SignupSchema>)=>{
 
         try {
             setLoading(true);
+            console.log({username,password,email,collegeName});
             const response = await axios.post("/api/auth/signup", {username,password,email,collegeName});
+            
             // console.log("Signup success", response.data);
             router.push("/login");
             

@@ -48,7 +48,7 @@ export function LoginCard(
             </div>
             <div>
                 <CardTitle>Login here</CardTitle>
-                <CardDescription>welcome to Gspot.</CardDescription>
+                <CardDescription>welcome back to Gspot.</CardDescription>
             </div>
             <div>
 
@@ -71,7 +71,7 @@ export function LoginCard(
           </div>
       </CardContent>
       <CardFooter className="flex justify-between">
-            <p>don't have an account?<span className="text-blue-500 cursor-pointer" onClick={redirectSignup}>click here</span></p>
+            <p>{"don't have an account ?"}<span className="text-blue-500 cursor-pointer" onClick={redirectSignup}>click here</span></p>
       </CardFooter>
     </Card>
 

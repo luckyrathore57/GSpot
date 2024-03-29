@@ -20,12 +20,14 @@ import {
 } from "@/components/ui/select"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons"
+import { z } from "zod"
+import { SignupSchema } from "@/zod/schema/authenticationSchema"
 
 
 
 interface SignUpProps{
     onClickBack:()=>void,
-    onClickSignup:(username:string,password:string,email:string,collegeName:string)=>void,
+    onClickSignup:({username,password,email,collegeName}:z.infer<typeof SignupSchema>)=>void,
     redirectLogin:()=>void,
     collegeOptions:string[]
 
@@ -89,7 +91,7 @@ export function SignupCard(
               </Select>
             </div>
             <div className="flex justify-center mt-3">
-            <Button className="w-full" onClick={()=>{onClickSignup(username,password,email,collegeName)}}>Create new account</Button>
+            <Button className="w-full" onClick={()=>{onClickSignup({username,password,email,collegeName})}}>Create new account</Button>
             </div>
           </div>
 

@@ -14,7 +14,8 @@ export async function POST(request:NextRequest){
             reqBody.error.issues;
         }
         else{
-            const {username,password}=reqBody.data;
+            let {username,password}=reqBody.data;
+            username=username.toLowerCase();
             const user=await prisma.user.findFirst({
                 where:{
                     username:username,
